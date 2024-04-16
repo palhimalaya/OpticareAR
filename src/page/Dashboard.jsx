@@ -8,6 +8,7 @@ import {
   CalendarRange,
   Contact,
   Glasses,
+  ShoppingCart,
 } from "lucide-react"
 
 
@@ -22,9 +23,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "@/components/ui/sheet"
 import { Link, Outlet, useLocation } from "react-router-dom"
 import { ModeToggle } from "@/components/mode-toogle"
+import Cart from "@/components/Cart"
 
 export default function Dashboard() {
   const location = useLocation();
@@ -177,6 +179,18 @@ export default function Dashboard() {
           </div>
           <Button variant="secondary" size="icon" className="rounded-full">
             <ModeToggle/>
+          </Button>
+          <Button variant="secondary" size="icon" className="rounded-full">
+            <Sheet>
+                <SheetTrigger>
+                  <ShoppingCart />
+                </SheetTrigger>
+                <SheetContent>
+                  <SheetHeader>
+                    <Cart/>
+                  </SheetHeader>
+                </SheetContent>
+              </Sheet>
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

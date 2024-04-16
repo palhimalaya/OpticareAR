@@ -8,6 +8,7 @@ import Dashboard from "@/page/Dashboard";
 import Products from "./components/Products";
 import ProductDetail from "./components/ProductDetail";
 import AboutUs from "./page/AboutUs";
+import UserProfile from "./components/UserProfile";
 
 export const router = createBrowserRouter([
   {
@@ -39,7 +40,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'user',
-        element: <Products/>
+        element: <UserProfile/>
       },
       {
         path: 'about',

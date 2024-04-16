@@ -1,49 +1,61 @@
-import { useState } from "react";
+import { ProductsData } from "@/data/ProductsData";
 import { Link } from "react-router-dom";
-import { Heart, Repeat2, User } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
+import Cart from "./Cart";
+import { useContext } from "react";
+import { CartContext } from "@/context/CartContext";
+import { handleAddToCart } from "@/lib/utils";
+
 
 const Products = () => {
-  const productData = [
-    {
-      id: 1,
-      imageSrc: "https://dummyimage.com/420x260",
-      title: "The Catalyzer",
-      price: "$16.00"
-    },
-    {
-      id: 2,
-      imageSrc: "https://dummyimage.com/421x261",
-      title: "Shooting Stars",
-      price: "$21.15"
-    },
-    {
-      id: 3,
-      imageSrc: "https://dummyimage.com/422x262",
-      title: "Neptune",
-      price: "$12.00"
-    },
-    {
-      id: 4,
-      imageSrc: "https://dummyimage.com/422x262",
-      title: "Neptune",
-      price: "$12.00"
-    }
-  ];
-
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
       <div className="flex items-center lg:mx-28">
         <h1 className="text-lg font-semibold dark:text-white md:text-2xl">Browse Our Products</h1>
       </div>
+      <div className="flex flex-row gap-2 lg:mx-28">
+        <Select>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="New" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem default value="new">New</SelectItem>
+            <SelectItem value="top">Top Rated</SelectItem>
+            <SelectItem value="featured">Featured</SelectItem>
+          </SelectContent>
+        </Select>
+        <Select>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Price" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="low-high">Low-High</SelectItem>
+            <SelectItem value="high-low">High-Low</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
       <section className="text-gray-600 body-font dark:text-gray-400">
         <div className="container px-5 mx-auto">
           <div className="flex flex-wrap -m-4">
-            {productData.map(product => (
+            {ProductsData.map(product => (
               <ProductCard
                 key={product.id}
                 id={product.id}
-                imageSrc={product.imageSrc}
-                title={product.title}
+                imageSrc={product.colors[0].image}
+                title={product.name}
                 price={product.price}
               />
             ))}
@@ -55,12 +67,7 @@ const Products = () => {
 };
 
 const ProductCard = ({ id, imageSrc, title, price }) => {
-  const [isFavourite, setIsFavourite] = useState(false);
-
-  const handleFavouriteClick = () => {
-    setIsFavourite(!isFavourite);
-  };
-
+  const { addToCart } = useContext(CartContext);
   return (
     <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
       <Link to={`/product/${id}`}>
@@ -68,20 +75,15 @@ const ProductCard = ({ id, imageSrc, title, price }) => {
           <a className="block relative h-48 rounded overflow-hidden">
             <img alt="ecommerce" className="object-cover object-center w-full h-full block" src={imageSrc} />
           </a>
-          <Heart
-            onClick={handleFavouriteClick}
-            className={`absolute top-0 right-0 m-2 cursor-pointer ${isFavourite ? 'fill-red-500 text-red-500 dark:fill-red-400 dark:text-red-400' : ' text-white dark:text-gray-300'}`}
-          />
         </div>
         <div className="mt-4 flex flex-row justify-between">
           <div>
             <h2 className="text-gray-900 title-font text-lg font-medium dark:text-white">{title}</h2>
-            <p className="mt-1 dark:text-gray-300">{price}</p>
           </div>
-          {/* <div className="flex flex-row text-sm">
-            <User className="h-5 w-6" />
-            <h3 className="tracking-widest title-font mb-1">4</h3>
-          </div> */}
+          <div>
+            <p className="mt-1 dark:text-gray-300">${price}</p>
+          </div>
+         
           {/* <Link to={`/product/${2}`}>
             <div className="flex flex-row justify-between items-center text-sm">
               <h3 className="text-gray-500 tracking-widest title-font mb-1">try it on</h3>
@@ -89,7 +91,21 @@ const ProductCard = ({ id, imageSrc, title, price }) => {
             </div>
           </Link> */}
         </div>
+        
       </Link>
+      <div className="flex">
+        <button className="text-white bg-gray-500 border-0 py-2 px-3 focus:outline-none hover:bg-gray-600 rounded">
+          &apos;Try It On&apos;
+        </button>
+        <Sheet>
+          <SheetTrigger onClick={()=>handleAddToCart(id, addToCart)} className="py-2 text-white bg-indigo-500 border-0 px-1 focus:outline-none hover:bg-indigo-600 rounded ml-auto">Add To Cart</SheetTrigger>
+          <SheetContent>
+            <SheetHeader>
+              <Cart/>
+            </SheetHeader>
+          </SheetContent>
+        </Sheet>
+      </div>
     </div>
   );
 };
