@@ -11,16 +11,33 @@ import {
   Sheet,
   SheetContent,
   SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
 import Cart from "./Cart";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { CartContext } from "@/context/CartContext";
 import { handleAddToCart } from "@/lib/utils";
 
 
 const Products = () => {
+  const [filter, setFilter] = useState('');
+
+  const handleFilterChange = (value) => {
+    console.log(value);
+    setFilter(value);
+  };
+
+  let products = [...ProductsData];
+
+  products.sort((a, b) => {
+    if (filter === 'low-high') {
+      return a.price - b.price;
+    } else if (filter === 'high-low') {
+      return b.price - a.price;
+    } else {
+      return 0;
+    }
+  });
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
       <div className="flex items-center lg:mx-28">
@@ -37,9 +54,9 @@ const Products = () => {
             <SelectItem value="featured">Featured</SelectItem>
           </SelectContent>
         </Select>
-        <Select>
+        <Select value={filter} onValueChange={setFilter}>
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Price" />
+            <SelectValue value="" placeholder="Price" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="low-high">Low-High</SelectItem>
@@ -50,7 +67,7 @@ const Products = () => {
       <section className="text-gray-600 body-font dark:text-gray-400">
         <div className="container px-5 mx-auto">
           <div className="flex flex-wrap -m-4">
-            {ProductsData.map(product => (
+            {products.map(product => (
               <ProductCard
                 key={product.id}
                 id={product.id}
@@ -70,12 +87,12 @@ const ProductCard = ({ id, imageSrc, title, price }) => {
   const { addToCart } = useContext(CartContext);
   return (
     <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
-      <Link to={`/product/${id}`}>
         <div className="relative">
           <a className="block relative h-48 rounded overflow-hidden">
             <img alt="ecommerce" className="object-cover object-center w-full h-full block" src={imageSrc} />
           </a>
         </div>
+      <Link to={`/product/${id}`}>
         <div className="mt-4 flex flex-row justify-between">
           <div>
             <h2 className="text-gray-900 title-font text-lg font-medium dark:text-white">{title}</h2>
@@ -90,9 +107,9 @@ const ProductCard = ({ id, imageSrc, title, price }) => {
               <Repeat2 className="h-6 w-6" />
             </div>
           </Link> */}
-        </div>
-        
+        </div>  
       </Link>
+
       <div className="flex">
         <button className="text-white bg-gray-500 border-0 py-2 px-3 focus:outline-none hover:bg-gray-600 rounded">
           &apos;Try It On&apos;
