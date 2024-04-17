@@ -17,13 +17,13 @@ import Cart from "./Cart";
 import { useContext, useState } from "react";
 import { CartContext } from "@/context/CartContext";
 import { handleAddToCart } from "@/lib/utils";
+import { Card } from "./ui/card";
 
 
 const Products = () => {
   const [filter, setFilter] = useState('');
 
   const handleFilterChange = (value) => {
-    console.log(value);
     setFilter(value);
   };
 
@@ -39,34 +39,25 @@ const Products = () => {
     }
   });
   return (
-    <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
-      <div className="flex items-center lg:mx-28">
+    <main className="flex flex-1 flex-col gap-4 lg:gap-6 ">
+      <div className="flex items-center container">
         <h1 className="text-lg font-semibold dark:text-white md:text-2xl">Browse Our Products</h1>
       </div>
-      <div className="flex flex-row gap-2 lg:mx-28">
-        <Select>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="New" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem default value="new">New</SelectItem>
-            <SelectItem value="top">Top Rated</SelectItem>
-            <SelectItem value="featured">Featured</SelectItem>
-          </SelectContent>
-        </Select>
-        <Select value={filter} onValueChange={setFilter}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue value="" placeholder="Price" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="low-high">Low-High</SelectItem>
-            <SelectItem value="high-low">High-Low</SelectItem>
-          </SelectContent>
-        </Select>
+      <div className="flex flex-row gap-2 container">
+        <select className="w-[180px] bg-white dark:bg-black border dark:text-gray-400 border-gray-300 rounded-md shadow-sm px-4 py-2 focus:outline-none focus:ring-2 focus:ring-fuchsia-500">
+          <option value="new" selected>New</option>
+          <option value="top">Top Rated</option>
+          <option value="featured">Featured</option>
+        </select>
+        <select className="w-[180px] bg-white border dark:bg-black dark:text-gray-400 border-gray-300 rounded-md shadow-sm px-4 py-2 focus:outline-none focus:ring-2 focus:ring-fuchsia-500" value={filter} onChange={e => handleFilterChange(e.target.value)}>
+          <option value="">Price</option>
+          <option value="low-high">Low-High</option>
+          <option value="high-low">High-Low</option>
+        </select>
       </div>
       <section className="text-gray-600 body-font dark:text-gray-400">
-        <div className="container px-5 mx-auto">
-          <div className="flex flex-wrap -m-4">
+        <div className="container">
+          <div className="flex flex-wrap">
             {products.map(product => (
               <ProductCard
                 key={product.id}
@@ -86,16 +77,16 @@ const Products = () => {
 const ProductCard = ({ id, imageSrc, title, price }) => {
   const { addToCart } = useContext(CartContext);
   return (
-    <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+    <Card className="p-4 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 mb-4 transition-transform duration-500 ease-in-out transform hover:scale-105 hover:z-50 shadow-lg">
+      <Link to={`/product/${id}`}>
         <div className="relative">
           <a className="block relative h-48 rounded overflow-hidden">
             <img alt="ecommerce" className="object-cover object-center w-full h-full block" src={imageSrc} />
           </a>
         </div>
-      <Link to={`/product/${id}`}>
         <div className="mt-4 flex flex-row justify-between">
           <div>
-            <h2 className="text-gray-900 title-font text-lg font-medium dark:text-white">{title}</h2>
+            <h2 className="text-gray-900 title-font text-sm font-medium dark:text-white">{title}</h2>
           </div>
           <div>
             <p className="mt-1 dark:text-gray-300">${price}</p>
@@ -110,12 +101,12 @@ const ProductCard = ({ id, imageSrc, title, price }) => {
         </div>  
       </Link>
 
-      <div className="flex">
-        <button className="text-white bg-gray-500 border-0 py-2 px-3 focus:outline-none hover:bg-gray-600 rounded">
+      <div className="flex gap-1">
+        <button className="text-white text-sm bg-gray-500 border-0 focus:outline-none hover:bg-gray-600 rounded p-1">
           &apos;Try It On&apos;
         </button>
         <Sheet>
-          <SheetTrigger onClick={()=>handleAddToCart(id, addToCart)} className="py-2 text-white bg-indigo-500 border-0 px-1 focus:outline-none hover:bg-indigo-600 rounded ml-auto">Add To Cart</SheetTrigger>
+          <SheetTrigger onClick={()=>handleAddToCart(id, addToCart)} className="text-sm text-white bg-[#ce1c43] border-0 p-1 focus:outline-none hover:bg-[#bf0930] rounded ">Add To Cart</SheetTrigger>
           <SheetContent>
             <SheetHeader>
               <Cart/>
@@ -123,7 +114,7 @@ const ProductCard = ({ id, imageSrc, title, price }) => {
           </SheetContent>
         </Sheet>
       </div>
-    </div>
+    </Card>
   );
 };
 

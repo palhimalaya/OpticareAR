@@ -9,6 +9,8 @@ import Products from "./components/Products";
 import ProductDetail from "./components/ProductDetail";
 import AboutUs from "./page/AboutUs";
 import UserProfile from "./components/UserProfile";
+import Home from "./components/Home";
+import Appointments from "./components/Appointments";
 
 export const router = createBrowserRouter([
   {
@@ -27,6 +29,10 @@ export const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children:[
       {
+        path: '',
+        element: <Home/>
+      },
+      {
         path: 'products',
         element: <Products/>
       },
@@ -36,7 +42,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'appointments',
-        element: <Products/>
+        element: <Appointments/>
       },
       {
         path: 'user',
@@ -49,7 +55,15 @@ export const router = createBrowserRouter([
       {
         path: 'contact',
         element: <Products/>
-      }
+      },
+      {
+        path: 'appointment-glasses',
+        element: <Products/>
+      },
+      {
+        path: 'appointment-eyes',
+        element: <Products/>
+      },
     ]
   },
   {

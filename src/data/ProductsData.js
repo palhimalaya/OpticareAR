@@ -86,5 +86,27 @@ export const ProductsData = [
         image: 'https://dummyimage.com/350x400'
       }
     ]
+  },
+  {
+    id: 5,
+    name: 'MIDNIGHT EYEWEAR',
+    price: '55.00',
+    brand: 'Versace',
+    review: 4,
+    descriptions: "Fam locavore kickstarter distillery. Mixtape chillwave tumeric sriracha taximy chia microdosing tilde DIY. XOXO fam indxgo juiceramps cornhole raw denim forage brooklyn. Everyday carry +1 seitan poutine tumeric. Gastropub blue bottle austin listicle pour-over, neutra jean shorts keytar banjo tattooed umami cardigan.",
+    colors: [
+      {
+        name: 'Red',
+        image: 'https://dummyimage.com/400x400'
+      },
+      {
+        name: 'Blue',
+        image: 'https://dummyimage.com/450x400'
+      },
+      {
+        name: 'Green',
+        image: 'https://dummyimage.com/350x400'
+      }
+    ]
   }
 ]
