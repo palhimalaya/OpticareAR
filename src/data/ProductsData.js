@@ -6,6 +6,7 @@ export const ProductsData = [
     brand: 'Oakley',
     review: 4,
     descriptions: "Fam locavore kickstarter distillery. Mixtape chillwave tumeric sriracha taximy chia microdosing tilde DIY. XOXO fam indxgo juiceramps cornhole raw denim forage brooklyn. Everyday carry +1 seitan poutine tumeric. Gastropub blue bottle austin listicle pour-over, neutra jean shorts keytar banjo tattooed umami cardigan.",
+    image: 'https://dummyimage.com/400x400',
     colors: [
       {
         name: 'Red',
@@ -28,6 +29,7 @@ export const ProductsData = [
     brand: 'Prada',
     review: 5,
     descriptions: "Fam locavore kickstarter distillery. Mixtape chillwave tumeric sriracha taximy chia microdosing tilde DIY. XOXO fam indxgo juiceramps cornhole raw denim forage brooklyn. Everyday carry +1 seitan poutine tumeric. Gastropub blue bottle austin listicle pour-over, neutra jean shorts keytar banjo tattooed umami cardigan.",
+    image: 'https://dummyimage.com/400x400',
     colors: [
       {
         name: 'Red',
@@ -50,6 +52,7 @@ export const ProductsData = [
     brand: 'Gucci',
     review: 4,
     descriptions: "Fam locavore kickstarter distillery. Mixtape chillwave tumeric sriracha taximy chia microdosing tilde DIY. XOXO fam indxgo juiceramps cornhole raw denim forage brooklyn. Everyday carry +1 seitan poutine tumeric. Gastropub blue bottle austin listicle pour-over, neutra jean shorts keytar banjo tattooed umami cardigan.",
+    image: 'https://dummyimage.com/400x400',
     colors: [
       {
         name: 'Red',
@@ -72,6 +75,7 @@ export const ProductsData = [
     brand: 'Versace',
     review: 4,
     descriptions: "Fam locavore kickstarter distillery. Mixtape chillwave tumeric sriracha taximy chia microdosing tilde DIY. XOXO fam indxgo juiceramps cornhole raw denim forage brooklyn. Everyday carry +1 seitan poutine tumeric. Gastropub blue bottle austin listicle pour-over, neutra jean shorts keytar banjo tattooed umami cardigan.",
+    image: 'https://dummyimage.com/400x400',
     colors: [
       {
         name: 'Red',
@@ -94,6 +98,7 @@ export const ProductsData = [
     brand: 'Versace',
     review: 4,
     descriptions: "Fam locavore kickstarter distillery. Mixtape chillwave tumeric sriracha taximy chia microdosing tilde DIY. XOXO fam indxgo juiceramps cornhole raw denim forage brooklyn. Everyday carry +1 seitan poutine tumeric. Gastropub blue bottle austin listicle pour-over, neutra jean shorts keytar banjo tattooed umami cardigan.",
+    image: 'https://dummyimage.com/400x400',
     colors: [
       {
         name: 'Red',

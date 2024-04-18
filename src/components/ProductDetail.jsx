@@ -13,18 +13,18 @@ import Cart from './Cart';
 import { CartContext } from '@/context/CartContext';
 
 const ProductDetail = () => {
-  const [selectedColor, setSelectedColor] = useState('Red');
-  const [productImage, setProductImage] = useState('https://dummyimage.com/400x400');
+  // const [selectedColor, setSelectedColor] = useState('Red');
+  // const [productImage, setProductImage] = useState('https://dummyimage.com/400x400');
   const [isFavourite, setIsFavourite] = useState(false);
 
   const { id } = useParams();
   const data = ProductsData.find((product) => product.id === parseInt(id));
   const { addToCart } = useContext(CartContext);
 
-  const handleColorChange = (color) => {
-    setSelectedColor(color.name);
-    setProductImage(color.image);
-  };
+  // const handleColorChange = (color) => {
+  //   setSelectedColor(color.name);
+  //   setProductImage(color.image);
+  // };
 
   const handleFavouriteClick = () => {
     setIsFavourite(!isFavourite);
@@ -36,7 +36,7 @@ const ProductDetail = () => {
           <img
             alt="ecommerce"
             className="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded"
-            src={productImage}
+            src={data.image}
           />
           <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
             <h2 className="text-sm title-font text-gray-500 dark:text-gray-300 tracking-widest">
@@ -70,7 +70,7 @@ const ProductDetail = () => {
             <p className="leading-relaxed">
               {data.descriptions}
             </p>
-            <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5">
+            {/* <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5">
               <div className="flex">
                 {data.colors.map((color) => (
                   <button
@@ -82,10 +82,9 @@ const ProductDetail = () => {
                 ))}
               </div>
               <div className="flex ml-6 items-center">
-                {/* Add size selection dropdown */}
               </div>
-            </div>
-            <div className="flex flex-wrap">
+            </div> */}
+            <div className="flex flex-wrap mt-6">
               <span className="title-font font-medium text-2xl text-gray-900 dark:text-white">
                 ${data.price}
               </span>

@@ -22,12 +22,24 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "@/components/ui/sheet"
-import { Link, Outlet, useLocation } from "react-router-dom"
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom"
 import { ModeToggle } from "@/components/mode-toogle"
 import Cart from "@/components/Cart"
+import { useEffect } from "react"
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const UserInfo = JSON.parse(localStorage.getItem("userInfo"));
+    if(!UserInfo) {
+      navigate('/login');
+    }
+  },[navigate])
   const location = useLocation();
+  const handleLogout= ()=>{
+    localStorage.removeItem("userInfo");
+    window.location.href = "/login";
+  }
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -200,10 +212,7 @@ export default function Dashboard() {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Support</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
