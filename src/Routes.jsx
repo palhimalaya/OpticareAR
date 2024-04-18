@@ -11,6 +11,8 @@ import AboutUs from "./page/AboutUs";
 import UserProfile from "./components/UserProfile";
 import Home from "./components/Home";
 import Appointments from "./components/Appointments";
+import AppointmentForm from "./components/AppointmentForm";
+import ContactUs from "./page/ContactUs";
 
 export const router = createBrowserRouter([
   {
@@ -54,15 +56,15 @@ export const router = createBrowserRouter([
       },
       {
         path: 'contact',
-        element: <Products/>
+        element: <ContactUs/>
       },
       {
         path: 'appointment-glasses',
-        element: <Products/>
+        element: <AppointmentForm headerText={"Book an Appointment For Your Glasses"}/>
       },
       {
         path: 'appointment-eyes',
-        element: <Products/>
+        element: <AppointmentForm headerText={"Book an Appointment For Your Eyes"}/>
       },
     ]
   },
