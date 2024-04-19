@@ -14,22 +14,37 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import Cart from "./Cart";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CartContext } from "@/context/CartContext";
 import { handleAddToCart } from "@/lib/utils";
 import { Card } from "./ui/card";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 
 const Products = () => {
   const [filter, setFilter] = useState('');
+  const [products, setProducts] = useState([]);
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+
+  useEffect(() => {
+    const getProducts = async() => {
+      try {
+        const response = await axios.get(`${baseUrl}/products`);
+        setProducts(response.data);
+      } catch (error) {
+        console.error(error);
+        toast.error("Failed to fetch products");
+      }
+    }
+    getProducts();
+  },[baseUrl])
 
   const handleFilterChange = (value) => {
     setFilter(value);
   };
-
-  let products = [...ProductsData];
-
-  products.sort((a, b) => {
+  let sortedProducts = [...products]
+  sortedProducts.sort((a, b) => {
     if (filter === 'low-high') {
       return a.price - b.price;
     } else if (filter === 'high-low') {
@@ -38,6 +53,7 @@ const Products = () => {
       return 0;
     }
   });
+  console.log(sortedProducts)
   return (
     <main className="flex flex-1 flex-col gap-4 lg:gap-6 ">
       <div className="flex items-center container">
@@ -58,11 +74,11 @@ const Products = () => {
       <section className="text-gray-600 body-font dark:text-gray-400">
         <div className="container">
           <div className="flex flex-wrap">
-            {products.map(product => (
+            {sortedProducts.map(product => (
               <ProductCard
-                key={product.id}
-                id={product.id}
-                imageSrc={product.colors[0].image}
+                key={product._id}
+                id={product._id}
+                imageSrc={product.image}
                 title={product.name}
                 price={product.price}
               />

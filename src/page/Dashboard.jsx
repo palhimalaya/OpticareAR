@@ -25,15 +25,17 @@ import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "@/components/ui/
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom"
 import { ModeToggle } from "@/components/mode-toogle"
 import Cart from "@/components/Cart"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const [userData, setUserData] = useState({});
   useEffect(() => {
     const UserInfo = JSON.parse(localStorage.getItem("userInfo"));
     if(!UserInfo) {
       navigate('/login');
     }
+    setUserData(UserInfo);
   },[navigate])
   const location = useLocation();
   const handleLogout= ()=>{
@@ -212,6 +214,7 @@ export default function Dashboard() {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
+              <DropdownMenuItem>{userData.firstName}  {userData.lastName}</DropdownMenuItem>
               <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

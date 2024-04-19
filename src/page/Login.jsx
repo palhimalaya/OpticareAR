@@ -13,7 +13,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 export function Login() {
-  const baseUrl = "http://localhost:8001/api";
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,6 +42,7 @@ export function Login() {
     try {
       const response = await axios.post(`${baseUrl}/user/login`, formData);
       localStorage.setItem("userInfo", JSON.stringify(response.data));
+      console.log(response.data);
       toast.success("Login Successful");
       navigate("/");
     } catch (error) {

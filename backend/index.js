@@ -6,6 +6,7 @@ const cors = require("cors");
 
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 const userRoute = require("./routes/user");
+const productRoute = require("./routes/product");
 
 const app = express();
 dotenv.config();
@@ -23,8 +24,15 @@ app.use(helmet());
 
 //routes
 app.use("/api/user", userRoute);
+app.use("/api/products", productRoute);
+//error middlewares
+app.use(notFound);
+app.use(errorHandler);
 
+//connect to db and start server
 connectDB();
+
+
 app.listen(8001, () => {
   console.log("listening on port 8001");
 });

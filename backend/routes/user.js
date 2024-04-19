@@ -1,4 +1,3 @@
-const { handleUserSignup } = require("../controllers/userController");
 const express = require("express");
 const {
   registerUser,

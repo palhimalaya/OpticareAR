@@ -21,32 +21,58 @@ import {
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
-import { ProductsData } from "@/data/ProductsData";
 import ProductForm from "@/components/ProductForm";
-import { useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { ProductContext } from "@/context/ProductContext";
 const AddProducts = () => {
   const navigate = useNavigate();
+  const { products, setProducts } = useContext(ProductContext);
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+  const [open, setOpen] = useState(false);
+  const [openAddProduct, setOpenProduct] = useState(false);
+    
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     if(userInfo?.role !== "admin"){
       navigate('/')
     }
-  }, [navigate]);
-  const handleDelete = (e)=>{
-    console.log('delete')
+    const getProducts = async() => {
+      try {
+        const response = await axios.get(`${baseUrl}/products`);
+        setProducts(response.data);
+      } catch (error) {
+        console.error(error);
+        toast.error("Failed to fetch products");
+      }
+    }
+    getProducts();
+  }, [baseUrl, navigate, setProducts, products]);
+
+  const handleDelete = async(id)=>{
+    try {
+      await axios.delete(`${baseUrl}/products/${id}`);
+      toast.success("Product deleted successfully");
+      setOpen(false)
+      navigate("/addProducts");
+    } catch (error) {
+      console.error(error);
+      toast.error("Product deletion failed");
+    }
   }
   return (
     <div className="">
       <div className=" flex m-5">
         <h1 className="text-2xl font-semibold">Products</h1>
         <div className="mt-4 lg:mt-0 lg:ml-auto lg:mr-32">
-          <Dialog>
+          <Dialog  open={openAddProduct} onOpenChange={setOpenProduct} >
             <DialogTrigger asChild>
               <Button variant="outline">Add Product</Button>
             </DialogTrigger>
             <DialogContent>
-              <ProductForm productAction={"create"} />
+              <ProductForm open={openAddProduct} setOpen={setOpenProduct}/>
             </DialogContent>
           </Dialog>
         </div>
@@ -67,9 +93,9 @@ const AddProducts = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {ProductsData.map((product) => {
+          {products.map((product) => {
             return (
-              <TableRow key={product.id}>
+              <TableRow key={product._id}>
                 <TableCell className="hidden sm:table-cell">
                   <img
                     alt="Product image"
@@ -91,14 +117,14 @@ const AddProducts = () => {
                 </TableCell>
                 <TableCell>
                   <div className="flex flex-row gap-4">
-                    <Dialog>
+                    <Dialog open={open} onOpenChange={setOpen}>
                       <DialogTrigger asChild>
                         <Button variant="outline" className="cursor-pointer">
                           Edit
                         </Button>
                       </DialogTrigger>
                       <DialogContent>
-                        <ProductForm id={product.id} />
+                        <ProductForm setOpen={setOpen} id={product._id} />
                       </DialogContent>
                     </Dialog>
                     <AlertDialog>
@@ -116,7 +142,7 @@ const AddProducts = () => {
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
+                        <AlertDialogAction onClick={()=>handleDelete(product._id)}>Delete</AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>

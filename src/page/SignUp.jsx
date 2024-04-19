@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import {toast } from 'react-toastify';
 
 export function SignUp() {
-  const baseUrl = "http://localhost:8001/api";
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
   const navigate = useNavigate();
 
   useEffect(() => {

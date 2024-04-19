@@ -4,13 +4,16 @@ import App from './App.jsx'
 import './index.css'
 import { ThemeProvider } from "@/components/theme-provider"
 import { CartProvider } from './context/CartContext.jsx'
+import { ProductProvider } from './context/ProductContext.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  <React.StrictMode >
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <CartProvider>
-        <App />
-      </CartProvider>
+      <ProductProvider>
+        <CartProvider>
+          <App />
+        </CartProvider>
+      </ProductProvider>
     </ThemeProvider>
   </React.StrictMode>,
 )

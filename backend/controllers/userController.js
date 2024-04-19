@@ -51,7 +51,7 @@ const createUserBasedOnRole = async (body) => {
       return user;
   }
 }
-const registerUser = async (req, res) => {
+const registerUser =(req, res) => {
   let body = req.body;
   if (!body.role) body = { ...body, role: "user" };
 
@@ -59,8 +59,8 @@ const registerUser = async (req, res) => {
   if (user) {
     res.status(201).json({
       _id: user._id,
-      firstName: user.name,
-      lastName: user.name,
+      firstName: user.first_name,
+      lastName: user.last_name,
       email: user.email,
       password: user.password,
       role: user.role,
@@ -78,8 +78,8 @@ const authUser = async (req, res) => {
   if (user && (await user.matchPassword(password))) {
     res.status(201).json({
       _id: user._id,
-      firstName: user.name,
-      lastName: user.name,
+      firstName: user.first_name,
+      lastName: user.last_name,
       email: user.email,
       password: user.password,
       role: user.role,

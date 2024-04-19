@@ -1,5 +1,5 @@
 import { ProductsData } from '@/data/ProductsData';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   Sheet,
@@ -11,20 +11,36 @@ import {
 import { handleAddToCart } from '@/lib/utils';
 import Cart from './Cart';
 import { CartContext } from '@/context/CartContext';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const ProductDetail = () => {
   // const [selectedColor, setSelectedColor] = useState('Red');
   // const [productImage, setProductImage] = useState('https://dummyimage.com/400x400');
   const [isFavourite, setIsFavourite] = useState(false);
+  const [data, setData] = useState({});
 
   const { id } = useParams();
-  const data = ProductsData.find((product) => product.id === parseInt(id));
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
   const { addToCart } = useContext(CartContext);
 
   // const handleColorChange = (color) => {
   //   setSelectedColor(color.name);
   //   setProductImage(color.image);
   // };
+
+  useEffect(() => {
+    try {
+      const getProduct = async () => {
+        const response = await axios.get(`${baseUrl}/products/${id}`);
+        setData(response.data);
+      };
+      getProduct();
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to fetch product");
+    }
+  }, [id, baseUrl]);
 
   const handleFavouriteClick = () => {
     setIsFavourite(!isFavourite);
@@ -68,7 +84,7 @@ const ProductDetail = () => {
               </span>
             </div>
             <p className="leading-relaxed">
-              {data.descriptions}
+              {data.description}
             </p>
             {/* <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5">
               <div className="flex">
