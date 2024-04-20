@@ -53,6 +53,12 @@ const Products = () => {
           <option value="low-high">Low-High</option>
           <option value="high-low">High-Low</option>
         </select>
+        {
+          localStorage.getItem("userInfo") && JSON.parse(localStorage.getItem("userInfo")).role === "admin" &&
+          <Link to={'/addProducts'} className="ml-auto">
+            <button className="text-white bg-gray-500 border-0 focus:outline-none hover:bg-gray-600 rounded p-2">Add Product</button>
+          </Link>
+        }
       </div>
       <section className="text-gray-600 body-font dark:text-gray-400">
         <div className="container">

@@ -9,6 +9,7 @@ import {
   Contact,
   Glasses,
   ShoppingCart,
+  Star,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -135,6 +136,13 @@ export default function Dashboard() {
                 Appointments
               </Link>
               }
+              <Link
+                to="/doctor-reviews"
+                className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary ${location.pathname === `/doctor-reviews` ? "bg-muted" : 'text-muted-foreground'}`}
+              >
+                <Star className="h-4 w-4" />
+                Doctor reviews
+              </Link>
               <Link
                 to="/contact"
                 className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary ${location.pathname === `/contact` ? "bg-muted" : 'text-muted-foreground'}`}

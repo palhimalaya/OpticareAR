@@ -17,14 +17,29 @@ const OrderSchema = new Schema({
         },
         price: Number
     }],
+    paymentType: {
+        type: String,
+        default: "Cash On Delivery",
+      },
     bill: {
         type: Number,
         required: true
     },
-    date_added: {
-        type: Date,
-        default: Date.now
-    }
-})
+    paymentStatus: {
+        type: String,
+        default: "Pending",
+      },
+    transactionId: {
+        type: String,
+      },
+    status: {
+        type: "string",
+        default: "Received",
+      },
+},
+{
+    timestamps: true
+}
+)
 
 module.exports = Order = mongoose.model('order',OrderSchema);

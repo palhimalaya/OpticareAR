@@ -1,47 +1,57 @@
-const Order = require('../models/order');
-const Cart = require('../models/cart');
-const User = require('../models/user');
-// const config = require('config');
-// const stripe = require('stripe')(config.get('StripeAPIKey'));
 
-const get_orders = async (req,res) => {
-    const userId = req.params.id;
-    Order.find({userId}).sort({date:-1}).then(orders => res.json(orders));
-}
+const Order = require("../models/orderModel");
+const { khaltiPayment } = require("../config/payment");
 
-const checkout = async (req,res) => {
-    try{
-        const userId = req.params.id;
-        const {source} = req.body;
-        let cart = await Cart.findOne({userId});
-        let user = await User.findOne({_id: userId});
-        const email = user.email;
-        if(cart){
-            const charge = await stripe.charges.create({
-                amount: cart.bill,
-                currency: 'inr',
-                source: source,
-                receipt_email: email
-            })
-            if(!charge) throw Error('Payment failed');
-            if(charge){
-                const order = await Order.create({
-                    userId,
-                    items: cart.items,
-                    bill: cart.bill
-                });
-                const data = await Cart.findByIdAndDelete({_id:cart.id});
-                return res.status(201).send(order);
-            }
+// Create order
+const createOrder = async (req, res) => {
+    let body = { ...req.body }; 
+    try {
+        const products = req.body.products; 
+        const order = await new Order({ ...body }).save(); 
+    
+        if (body.paymentType === "Khalti") {
+          const requestPayload = {
+            return_url: `http://localhost:8000/api/khalti/callback`,
+            website_url: `http://localhost:8000`,
+            amount: req.body.totalPrice * 100,
+            purchase_order_id: order._id,
+            purchase_order_name: "Order " + order.user,
+          };
+    
+          const khalti = await khaltiPayment(requestPayload); 
+          res.status(200).send({
+            data: khalti,
+            order_id: order._id,
+            type: "khalti",
+            message: "Redirecting to khalti.",
+          });
+        } else {
+          res.status(200).send({
+            data: order,
+            type: "cash",
+            message: "Order placed successfully.",
+          });
         }
-        else{
-            res.status(500).send("You do not have items in cart");
-        }
-    }
-    catch(err){
-        console.log(err);
-        res.status(500).send("Something went wrong");
-    }
-}
+      } catch (error) {
+        console.log(error);
+        res.status(500).send({ message: "Internal server error." });
+      }
+};
 
-module.exports = {get_orders, checkout};
+// Get all orders
+const getOrders = async (req, res) => {
+    const id = req.params.id;
+    try {
+        const orders = await Order.find({ userId: id });
+        res.status(200).send(orders);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ message: "Internal server error." });
+    }
+};
+
+
+module.exports = {
+    createOrder,
+    getOrders
+};

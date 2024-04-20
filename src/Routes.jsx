@@ -16,6 +16,8 @@ import ContactUs from "./page/ContactUs";
 import AddProducts from "./page/AddProducts";
 import Checkout from "./page/Checkout";
 import NotificationPage from "./page/NotificationPage";
+import DoctorReview from "./page/DoctorReview";
+import PerDoctorReviews from "./components/PerDoctorReviews";
 
 export const router = createBrowserRouter([
   {
@@ -80,6 +82,14 @@ export const router = createBrowserRouter([
       {
         path: "notifications",
         element: <NotificationPage/>
+      },
+      {
+        path: "doctor-reviews",
+        element: <DoctorReview/>,
+      },
+      {
+        path: "doctor-reviews/:doctorId",
+        element: <PerDoctorReviews/>
       }
     ]
   },
