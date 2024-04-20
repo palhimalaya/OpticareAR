@@ -15,6 +15,7 @@ import AppointmentForm from "./components/AppointmentForm";
 import ContactUs from "./page/ContactUs";
 import AddProducts from "./page/AddProducts";
 import Checkout from "./page/Checkout";
+import NotificationPage from "./page/NotificationPage";
 
 export const router = createBrowserRouter([
   {
@@ -75,6 +76,10 @@ export const router = createBrowserRouter([
       {
         path: "checkout",
         element: <Checkout/>
+      },
+      {
+        path: "notifications",
+        element: <NotificationPage/>
       }
     ]
   },

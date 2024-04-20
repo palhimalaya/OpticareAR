@@ -20,30 +20,50 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu"
+
 import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "@/components/ui/sheet"
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom"
 import { ModeToggle } from "@/components/mode-toogle"
 import Cart from "@/components/Cart"
 import { useEffect, useState } from "react"
+import NotificationModal from "@/components/NotificationModal"
+import { Badge } from "@/components/ui/badge"
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const [userData, setUserData] = useState({});
+  const [notifications, setNotifications] = useState([]);
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+
   useEffect(() => {
     const UserInfo = JSON.parse(localStorage.getItem("userInfo"));
     if(!UserInfo) {
       navigate('/login');
     }
-    if(UserInfo.role === "doctor") {
-      navigate('/user');
-    }
+    const fetchNotifications = async () => {
+      try {
+        const response = await fetch(`${baseUrl}/notification/${UserInfo._id}`);
+        const data = await response.json();
+        setNotifications(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchNotifications();
     setUserData(UserInfo);
   },[navigate])
   const location = useLocation();
   const handleLogout= ()=>{
     localStorage.removeItem("userInfo");
-    window.location.href = "/login";
+    navigate('/login')
   }
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
@@ -57,10 +77,20 @@ export default function Dashboard() {
                className=" h-10 w-14" />
               <span className="">OpticareAR</span>
             </Link>
-            <Button variant="outline" size="icon" className="ml-auto h-8 w-8">
-              <Bell className="h-4 w-4" />
-              <span className="sr-only">Toggle notifications</span>
-            </Button>
+            <NavigationMenu className="ml-5">
+              <NavigationMenuList>
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger>
+                      <Bell className="h-4 w-4" />
+                      <span className="sr-only">Toggle notifications</span>
+                      <Badge color="primary" className="absolute top-0 right-0">{notifications.length}</Badge>
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <NotificationModal notifications={notifications}/>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
           </div>
           <div className="flex-1">
             <nav className="grid items-start px-2 text-lg font-medium lg:px-4">

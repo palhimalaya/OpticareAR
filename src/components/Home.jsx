@@ -5,10 +5,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Link } from "react-router-dom"
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom"
 
 
 const Home = () => {
+  const UserInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const navigate = useNavigate();
+  useEffect(() => {
+    if(UserInfo.role === "doctor") {
+      navigate('/user');
+    }
+  }, []);
   return (
     <div className="container flex justify-evenly mt-7 flex-wrap">
       <div>

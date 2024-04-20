@@ -92,12 +92,12 @@ export default function UserProfile() {
                       userInfo.role === "doctor" ? (
                         <div>
                           <span className="font-semibold">Doctor:</span>
-                          <span className="text-gray-500 ml-4">{appointment.doctor.first_name} {appointment.doctor.last_name}</span>
+                          <span className="text-gray-500 ml-4">{appointment.patient.first_name} {appointment.patient.last_name}</span>
                       </div>
                       ) : (
                         <div>
                         <span className="font-semibold">Patient:</span>
-                        <span className="text-gray-500 ml-4">{appointment.patient.first_name} {appointment.patient.last_name}</span>
+                        <span className="text-gray-500 ml-4">{appointment.doctor.first_name} {appointment.doctor.last_name}</span>
                       </div>
                       )
                      }

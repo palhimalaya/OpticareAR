@@ -1,5 +1,6 @@
 const Appointment = require('../models/appointment');
 const User = require('../models/user');
+const Notification = require('../models/notification');
 
 // Create a new appointment
 const createAppointment = async (req, res) => {
@@ -19,6 +20,11 @@ const createAppointment = async (req, res) => {
       doctor: doctorId,
       patient: patientId,
       contact
+    });
+    const notificationMessage = `New appointment scheduled with ${patient.first_name} ${patient.last_name} on ${date} at ${time}.`;
+    await Notification.create({
+      user: doctorId,
+      message: notificationMessage
     });
     res.status(201).json({ success: true, data: appointment });
   } catch (error) {

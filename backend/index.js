@@ -10,6 +10,7 @@ const productRoute = require("./routes/product");
 const cartRoute = require("./routes/cart");
 const orderRoute = require("./routes/order");
 const appointmentRoute = require("./routes/appointment");
+const notificationRoute = require("./routes/notification");
 
 const app = express();
 dotenv.config();
@@ -31,7 +32,9 @@ app.use("/api/products", productRoute);
 
 app.use('/api/cart', cartRoute);
 app.use('/api/orders', orderRoute);
-app.use('/api/appointment',appointmentRoute)
+app.use('/api/appointment', appointmentRoute);
+app.use('/api/notification', notificationRoute);
+
 //error middlewares
 app.use(notFound);
 app.use(errorHandler);
