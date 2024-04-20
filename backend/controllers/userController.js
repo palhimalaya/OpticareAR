@@ -67,8 +67,7 @@ const registerUser =(req, res) => {
       token: generateToken(user._id),
     });
   } else {
-    res.status(400);
-    throw new Error("Failed to create user");
+    res.status(400).json({ message: "Failed to create user" });
   }
 };
 const authUser = async (req, res) => {
@@ -86,8 +85,7 @@ const authUser = async (req, res) => {
       token: generateToken(user._id),
     });
   } else {
-    res.status(400);
-    throw new Error("Invalid credentials");
+    res.status(401).json({ message: "Invalid email or password" });
   }
 };
 
@@ -105,8 +103,57 @@ const allUsers = async (req, res) => {
   res.send(users);
 };
 
+const getUserById = async (req, res, next, id) => {
+  try {
+      const user = await User.findById(id)
+      if (!user) {
+          return res.status(400).json({ error: 'No User found' });
+      }
+      req.user = user;
+      next();
+  } catch (err) {
+      return res.status(400).json({ error: err?.message || 'No User found' });
+  }
+};
+
+// const isSignedIn = expressjwt({
+//   secret: process.env.SECRET,
+//   requestProperty: 'auth',
+//   algorithms: ["HS256"]
+// });
+
+const isAuthenticated = (req, res, next) => {
+  console.log(req.auth, req.user)
+  let checker = req.auth && req.user && req.auth._id == req.user._id
+  if (!checker) {
+      return res.status(403).json({
+          error: 'Authenticated Access Denied',
+      });
+  }
+  next()
+}
+
+const isAdmin = (req, res, next) => {
+  if (req.user.role === "admin") {
+      next();
+  } else {
+      return res.status(403).json({
+          error: 'Admin Access Denied',
+      });
+  }
+}
+
+const getAllDoctors = async (req, res) => {
+  const doctors = await User.find({ role: "doctor" });
+  res.send(doctors);
+};
+
 module.exports = {
     registerUser,
     authUser,
-    allUsers
+    allUsers,
+    isAuthenticated,
+    isAdmin,
+    getUserById,
+    getAllDoctors
 }

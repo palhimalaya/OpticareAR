@@ -49,11 +49,9 @@ export function SignUp() {
     if(role === "doctor") {
       data.role = "doctor";
     }
-    console.log(data);
     try {
       const response = await axios.post(`${baseUrl}/user/register`, data);
       localStorage.setItem("userInfo", JSON.stringify(response.data));
-
       toast.success("Signup Successful");
       navigate("/");
     } catch (error) {

@@ -7,6 +7,9 @@ const cors = require("cors");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 const userRoute = require("./routes/user");
 const productRoute = require("./routes/product");
+const cartRoute = require("./routes/cart");
+const orderRoute = require("./routes/order");
+const appointmentRoute = require("./routes/appointment");
 
 const app = express();
 dotenv.config();
@@ -25,6 +28,10 @@ app.use(helmet());
 //routes
 app.use("/api/user", userRoute);
 app.use("/api/products", productRoute);
+
+app.use('/api/cart', cartRoute);
+app.use('/api/orders', orderRoute);
+app.use('/api/appointment',appointmentRoute)
 //error middlewares
 app.use(notFound);
 app.use(errorHandler);

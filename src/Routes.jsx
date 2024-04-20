@@ -14,6 +14,7 @@ import Appointments from "./components/Appointments";
 import AppointmentForm from "./components/AppointmentForm";
 import ContactUs from "./page/ContactUs";
 import AddProducts from "./page/AddProducts";
+import Checkout from "./page/Checkout";
 
 export const router = createBrowserRouter([
   {
@@ -70,6 +71,10 @@ export const router = createBrowserRouter([
       {
         path: 'addProducts',
         element: <AddProducts/>
+      },
+      {
+        path: "checkout",
+        element: <Checkout/>
       }
     ]
   },

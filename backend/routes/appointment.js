@@ -1,16 +1,16 @@
-const router = require("express").Router();
-const { User, validate } = require("../../models/user");
-const bcrypt = require("bcrypt");
+const express = require('express');
+const router = express.Router();
+const {
+    createAppointment,
+    getAppointments,
+    getAppointment,
+    updateAppointment,
+    deleteAppointment,
+    getAppointmentsByUser
+} = require('../controllers/appointmentController');
 
-router.post("/", async (req, res) => {
-  
-});
-const validate = (data) => {
-  const schema = Joi.object({
-    email: Joi.string().email().required().label("Email"),
-    password: Joi.string().required().label("Password"),
-  });
-  return schema.validate(data);
-};
+router.route('/').post(createAppointment).get(getAppointments);
+router.route('/:id').put(updateAppointment).delete(deleteAppointment);
+router.route('/:userId').get(getAppointmentsByUser);
 
 module.exports = router;

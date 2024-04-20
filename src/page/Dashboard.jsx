@@ -35,6 +35,9 @@ export default function Dashboard() {
     if(!UserInfo) {
       navigate('/login');
     }
+    if(UserInfo.role === "doctor") {
+      navigate('/user');
+    }
     setUserData(UserInfo);
   },[navigate])
   const location = useLocation();
@@ -61,6 +64,8 @@ export default function Dashboard() {
           </div>
           <div className="flex-1">
             <nav className="grid items-start px-2 text-lg font-medium lg:px-4">
+            {
+                  userData.role != "doctor" && 
               <Link
                 to="/"
                 className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary ${location.pathname === `/` ? "bg-muted" : 'text-muted-foreground'}`}
@@ -68,6 +73,7 @@ export default function Dashboard() {
                 <LayoutGrid className="h-4 w-4" />
                 Home
               </Link>
+}
               <Link
                 to="/user"
                 className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary ${location.pathname === `/user` ? "bg-muted" : 'text-muted-foreground'}`}
@@ -89,6 +95,8 @@ export default function Dashboard() {
                 <Glasses className="h-4 w-4" />
                 AR glasses
               </Link>
+              {
+                  userData.role != "doctor" && 
               <Link
                 to="/appointments"
                 className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary ${location.pathname === `/appointments` ? "bg-muted" : 'text-muted-foreground'}`}
@@ -96,6 +104,7 @@ export default function Dashboard() {
                 <CalendarRange className="h-4 w-4" />
                 Appointments
               </Link>
+              }
               <Link
                 to="/contact"
                 className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary ${location.pathname === `/contact` ? "bg-muted" : 'text-muted-foreground'}`}
@@ -132,6 +141,8 @@ export default function Dashboard() {
                className=" h-10 w-14" />
               <span className="">OpticareAR</span>
                 </Link>
+                {
+                  userData.role != "doctor" && 
                 <Link
                   to="/"
                   className={`mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 hover:text-foreground ${location.pathname === `/` ? "bg-muted" : 'text-muted-foreground'}`}
@@ -139,6 +150,7 @@ export default function Dashboard() {
                   <LayoutGrid className="h-5 w-5" />
                   Home
                 </Link>
+                }
                 <Link
                   to="/user"
                   className={`mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 hover:text-foreground ${location.pathname === `/user` ? "bg-muted" : 'text-muted-foreground'}`}
@@ -160,13 +172,16 @@ export default function Dashboard() {
                  <Glasses className="h-5 w-5" />
                 AR glasses
                 </Link>
-                <Link
-                  to="/appointments"
-                  className={`mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 hover:text-foreground ${location.pathname === `/appointments` ? "bg-muted" : 'text-muted-foreground'}`}
-                >
-                  <CalendarRange className="h-5 w-5" />
-                Appointments
-                </Link>
+                {
+                  userData.role != "doctor" && 
+                  <Link
+                    to="/appointments"
+                    className={`mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 hover:text-foreground ${location.pathname === `/appointments` ? "bg-muted" : 'text-muted-foreground'}`}
+                    >
+                    <CalendarRange className="h-5 w-5" />
+                  Appointments
+                  </Link>
+                }
                 <Link
                   to="/contact"
                   className={`mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 hover:text-foreground ${location.pathname === `/contact` ? "bg-muted" : 'text-muted-foreground'}`}

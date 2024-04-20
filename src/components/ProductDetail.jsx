@@ -109,7 +109,7 @@ const ProductDetail = () => {
                 &apos;Try It On&apos;
               </button>
               <Sheet>
-                <SheetTrigger onClick={()=>handleAddToCart(id, addToCart)} className="py-2 text-white bg-indigo-500 border-0 px-1 focus:outline-none hover:bg-indigo-600 rounded ml-auto">Add To Cart</SheetTrigger>
+                <SheetTrigger onClick={()=>addToCart(data)} className="py-2 text-white bg-indigo-500 border-0 px-1 focus:outline-none hover:bg-indigo-600 rounded ml-auto">Add To Cart</SheetTrigger>
                 <SheetContent>
                   <SheetHeader>
                     <SheetTitle className="text-2xl font-bold mb-4">Shopping Cart</SheetTitle>

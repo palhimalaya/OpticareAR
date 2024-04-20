@@ -1,22 +1,5 @@
-import { ProductsData } from "@/data/ProductsData";
 import { Link } from "react-router-dom";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTrigger,
-} from "@/components/ui/sheet"
-import Cart from "./Cart";
-import { useContext, useEffect, useState } from "react";
-import { CartContext } from "@/context/CartContext";
-import { handleAddToCart } from "@/lib/utils";
+import { useEffect, useState } from "react";
 import { Card } from "./ui/card";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -91,7 +74,6 @@ const Products = () => {
 };
 
 const ProductCard = ({ id, imageSrc, title, price }) => {
-  const { addToCart } = useContext(CartContext);
   return (
     <Card className="p-4 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 mb-4 transition-transform duration-500 ease-in-out transform hover:scale-105 hover:z-50 shadow-lg">
       <Link to={`/product/${id}`}>
@@ -121,14 +103,6 @@ const ProductCard = ({ id, imageSrc, title, price }) => {
         <button className="text-white text-sm bg-gray-500 border-0 focus:outline-none hover:bg-gray-600 rounded p-1">
           &apos;Try It On&apos;
         </button>
-        <Sheet>
-          <SheetTrigger onClick={()=>handleAddToCart(id, addToCart)} className="text-sm text-white bg-[#ce1c43] border-0 p-1 focus:outline-none hover:bg-[#bf0930] rounded ">Add To Cart</SheetTrigger>
-          <SheetContent>
-            <SheetHeader>
-              <Cart/>
-            </SheetHeader>
-          </SheetContent>
-        </Sheet>
       </div>
     </Card>
   );

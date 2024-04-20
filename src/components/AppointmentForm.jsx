@@ -1,92 +1,148 @@
-import { useState } from "react"
-import { Calendar } from "./ui/calendar"
-import { Label } from "./ui/label"
+import { useEffect, useState } from "react";
+import { Label } from "./ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+import axios from "axios";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { toast } from "react-toastify";
 
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
-import { Input } from "./ui/input"
-import { Button } from "./ui/button"
 
-const AppointmentForm = ({headerText}) => {
-  const [date, setDate] = useState(new Date())
+const AppointmentForm = ({ headerText }) => {
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const [formData, setFormData] = useState({
+    date: "",
+    time: "",
+    contact: "",
+    patientId: userInfo._id,
+    doctorId: "",
+  });
+  const [doctors, setDoctors] = useState([]);
+  const [selectedDoctor, setSelectedDoctor] = useState("");
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const response = await axios.get(`${baseUrl}/user/doctors`);
+        setDoctors(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchDoctors();
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+  const handleDoctorChange = (value) => {
+    setSelectedDoctor(value);
+    setFormData((prevData) => ({
+      ...prevData,
+      doctorId: value,
+    }));
+  };
+
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    try {
+      await axios.post(`${baseUrl}/appointment/`, formData);
+      toast.success("Appointment Booked Successfully");
+      setFormData({
+        date: "",
+        time: "",
+        contact: "",
+        patientId: userInfo._id,
+        doctorId: "",
+      
+      })
+      setSelectedDoctor("");
+
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to Book Appointment");
+    }
+  };
+
   return (
-    <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px] relative">
-      <div className="absolute inset-0 flex justify-center">
-        <div className="text-2xl mt-3">
-          <h1 className="underline">
-            {headerText}
-          </h1>
-        </div>
-      </div>
-      <div className="flex justify-center flex-col items-center sm:mt-10">  
-        <div className="flex flex-col justify-center items-center mt-10">
-          {/* <p className="text-sm">Select a date to book an appointment</p> */}
-          <Label htmlFor="date">Select Date</Label>
-        </div>
-          <Calendar
-            mode="single"
-            selected={date}
-            onSelect={setDate}
-            className="rounded-md border mt-3"
-          />
-      </div>
-      <div className="flex items-center justify-center py-12  h-[868px]">
-        <Card className="mx-auto max-w-sm">
-        <CardHeader>
-          <CardTitle className="text-xl">Your Personal Information</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 w-72">
-            <div className="grid gap-2">
-              <Label htmlFor="firstName">First Name</Label>
-              <Input
-                id="firstName"
-                type="firstName"
-                placeholder="john"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="lastName">Last Name</Label>
-              <Input
-                id="lastName"
-                type="lastName"
-                placeholder="Doe"
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="contact">Contact</Label>
-              <Input
-                id="contact"
-                type="contact"
-                placeholder="98xxxxx"
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="address">Address</Label>
-              <Input
-                id="address"
-                type="address"
-                placeholder="ktm"
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="john@exampl.com"
-                required
-              />
-            </div>
-            <Button type="submit" className="w-full">
-              Book Now
-            </Button>
-          </div>
-        </CardContent>
+    <div className="flex justify-center items-center h-[90%]">
+      <div className="max-w-sm">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-xl">{headerText}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="grid gap-4">
+              <div className="grid gap-2">
+                  <Label htmlFor="doctor">Select Doctor</Label>
+                  <Select onValueChange={handleDoctorChange} value={selectedDoctor}>
+                    <SelectTrigger >
+                      <SelectValue placeholder="Select Doctor" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {doctors.map((doctor) => (
+                        <SelectItem key={doctor._id} value={doctor._id}>
+                          {doctor.first_name} {doctor.last_name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                </div>
+              <div className="grid gap-2">
+                <Label htmlFor="date">Date</Label>
+                <Input
+                  id="date"
+                  type="date"
+                  name="date"
+                  value={formData.date}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="time">Time</Label>
+                <Input
+                  id="time"
+                  type="time"
+                  name="time"
+                  value={formData.time}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="contact">Contact</Label>
+                <Input
+                  id="contact"
+                  type="text"
+                  name="contact"
+                  placeholder="9876543210"
+                  value={formData.contact}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <Button type="submit" className="w-full">
+                Book Now
+              </Button>
+            </form>
+          </CardContent>
         </Card>
       </div>
-  </div>
-  )
-}
+    </div>
+  );
+};
 
-export default AppointmentForm
+export default AppointmentForm;

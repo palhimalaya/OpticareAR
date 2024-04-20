@@ -18,7 +18,6 @@ export function Login() {
 
   useEffect(() => {
     const UserInfo = JSON.parse(localStorage.getItem("userInfo"));
-    console.log(UserInfo);
     if (UserInfo?.token) {
       navigate("/");
     }
@@ -47,6 +46,7 @@ export function Login() {
       navigate("/");
     } catch (error) {
       console.error(error);
+      toast.error(error.response?.data.error || "Failed to Login! Please check credentials");
     }
   };
   return (
