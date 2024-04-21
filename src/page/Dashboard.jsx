@@ -53,7 +53,7 @@ export default function Dashboard() {
       try {
         const response = await fetch(`${baseUrl}/notification/${UserInfo._id}`);
         const data = await response.json();
-        setNotifications(data);
+        setNotifications(data.filter((notification) => !notification.read));
       } catch (error) {
         console.error(error);
       }
