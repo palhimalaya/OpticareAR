@@ -50,7 +50,7 @@ const DoctorReview = () => {
                       alt="doctor"
                       className="object-cover object-center w-full h-full block"
                       src={
-                        "https://epomaker.com/cdn/shop/files/203A8580.jpg?v=1702262564&width=823"
+                       doctor.image_url
                       }
                     />
                   </a>

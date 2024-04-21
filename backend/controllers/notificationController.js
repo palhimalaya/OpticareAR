@@ -45,6 +45,17 @@ const markNotificationAsRead = async (req, res) => {
     }
 };
 
+const markAllNotificationAsRead = async (req, res) => {
+    const userId = req.params.userId;
+    try {
+        const notifications = await Notification.updateMany({ user: userId }, { read: true });
+        res.status(200).json(notifications);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to mark all notifications as read" });
+    }
+}
+
 const deleteNotification = async (req, res) => {
     const notificationId = req.params.id;
     try {
@@ -65,5 +76,6 @@ module.exports = {
     createNotification,
     getUserNotifications,
     markNotificationAsRead,
-    deleteNotification
+    deleteNotification,
+    markAllNotificationAsRead
 };

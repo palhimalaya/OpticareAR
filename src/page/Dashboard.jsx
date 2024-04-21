@@ -84,7 +84,9 @@ export default function Dashboard() {
                   <NavigationMenuTrigger>
                       <Bell className="h-4 w-4" />
                       <span className="sr-only">Toggle notifications</span>
-                      <Badge color="primary" className="absolute top-0 right-0">{notifications.length}</Badge>
+                      <Badge color="primary" className="absolute top-0 right-0">{
+                        notifications.filter((notification) => !notification.read).length
+                      }</Badge>
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <NotificationModal notifications={notifications}/>
