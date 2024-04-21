@@ -1,7 +1,10 @@
 const User = require("../models/user");
 const { generateToken } = require("../config/generateToken");
 
-const createUserBasedOnRole = async (body) => {
+const registerUser = async(req, res) => {
+  let body = req.body;
+  if (!body.role) body = { ...body, role: "user" };
+
   if(body.role === "doctor") {
     const { firstName, lastName, email, password, role, medicalLicense, specialization } = body;
 
@@ -25,7 +28,19 @@ const createUserBasedOnRole = async (body) => {
       medicalLicense,
       specialization
     });
-    return user;
+    if (user) {
+      res.status(201).json({
+        _id: user._id,
+        firstName: user.first_name,
+        lastName: user.last_name,
+        email: user.email,
+        password: user.password,
+        role: user.role,
+        token: generateToken(user._id),
+      });
+    } else {
+      res.status(400).json({ message: "Failed to create user" });
+    }
   }else{
     const { firstName, lastName, email, password, role } = body;
 
@@ -48,27 +63,21 @@ const createUserBasedOnRole = async (body) => {
         role,
       });
 
-      return user;
+      if (user) {
+        res.status(201).json({
+          _id: user._id,
+          firstName: user.first_name,
+          lastName: user.last_name,
+          email: user.email,
+          password: user.password,
+          role: user.role,
+          token: generateToken(user._id),
+        });
+      } else {
+        res.status(400).json({ message: "Failed to create user" });
+      }
   }
-}
-const registerUser =(req, res) => {
-  let body = req.body;
-  if (!body.role) body = { ...body, role: "user" };
-
-  const user = createUserBasedOnRole(body)
-  if (user) {
-    res.status(201).json({
-      _id: user._id,
-      firstName: user.first_name,
-      lastName: user.last_name,
-      email: user.email,
-      password: user.password,
-      role: user.role,
-      token: generateToken(user._id),
-    });
-  } else {
-    res.status(400).json({ message: "Failed to create user" });
-  }
+  
 };
 const authUser = async (req, res) => {
   const { email, password } = req.body;
