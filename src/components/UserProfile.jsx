@@ -38,7 +38,7 @@ export default function UserProfile() {
                 <img
                   alt="Profile"
                   height="400"
-                  src="https://source.unsplash.com/400x400/?portrait"
+                  src= {userInfo.image_url || "https://source.unsplash.com/400x400/?portrait"}
                   style={{
                     aspectRatio: "400/400",
                     objectFit: "cover",

@@ -148,6 +148,24 @@ const getAllDoctors = async (req, res) => {
   res.send(doctors);
 };
 
+const updateUsers = async (req, res) => {
+  try {
+      // update password, photo 
+      const {userId} = req.params;
+      const filename = req.file.filename;
+      const url = `${req.protocol}://${req.get('host')}/images/${filename}`;
+      const user = await User.findById(userId);
+      if (!user) {
+          return res.status(400).json({ error: 'User not found' });
+      }
+      user.image_url = url || user.image_url;
+      const updatedUser = await user.save();
+      res.json(updatedUser);
+  } catch (err) {
+      return res.status(400).json({ error: err?.message || 'User Update Failed' });
+  }
+}
+
 module.exports = {
     registerUser,
     authUser,
@@ -155,5 +173,6 @@ module.exports = {
     isAuthenticated,
     isAdmin,
     getUserById,
-    getAllDoctors
+    getAllDoctors,
+    updateUsers
 }

@@ -8,12 +8,37 @@ const createAppointment = async (req, res) => {
   if (!date || !time || !doctorId || !patientId || !contact) {
     return res.status(400).json({ success: false, message: 'Please enter all required fields' });
   }
+
   const doctor = await User.findById(doctorId);
   const patient = await User.findById(patientId);
+
   if (!doctor || !patient) {
     return res.status(404).json({ success: false, message: 'Doctor or patient not found' });
   }
+
+  // Find all existing appointments for the same date and doctor
+  const existingAppointments = await Appointment.find({ date, doctor: doctorId });
+  // Check if there are any existing appointments
+  if (existingAppointments.length > 0) {
+    // Iterate through each existing appointment
+    for (const existingAppointment of existingAppointments) {
+      console.log(existingAppointment);
+      const existingAppointmentTime = new Date('2000-01-01T' + existingAppointment.time + ':00')
+      const newAppointmentTime = new Date('2000-01-01T' + time + ':00')
+      const timeDifferenceMs = Math.abs(newAppointmentTime - existingAppointmentTime);
+      const timeDifferenceHr = timeDifferenceMs / (1000 * 60 * 60);
+      console.log(timeDifferenceHr, newAppointmentTime, existingAppointmentTime);
+      if (timeDifferenceHr < 1) {
+        return res.json({ 
+          status: 400,
+          success: false,
+          message: 'Appointment already exists within 1 hour. Please change date or time' });
+      }
+    }
+  }
+
   try {
+    // Create the new appointment
     const appointment = await Appointment.create({
       date,
       time,
@@ -21,16 +46,20 @@ const createAppointment = async (req, res) => {
       patient: patientId,
       contact
     });
+
+    // Create a notification for the doctor
     const notificationMessage = `New appointment scheduled with ${patient.first_name} ${patient.last_name} on ${date} at ${time}.`;
     await Notification.create({
       user: doctorId,
       message: notificationMessage
     });
+
     res.status(201).json({ success: true, data: appointment });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
 
 // Get all appointments
 const getAppointments = async (req, res) => {

@@ -57,17 +57,22 @@ const AppointmentForm = ({ headerText }) => {
   const handleSubmit = async(e) => {
     e.preventDefault();
     try {
-      await axios.post(`${baseUrl}/appointment/`, formData);
-      toast.success("Appointment Booked Successfully");
-      setFormData({
-        date: "",
-        time: "",
-        contact: "",
-        patientId: userInfo._id,
-        doctorId: "",
-      
-      })
-      setSelectedDoctor("");
+      const res = await axios.post(`${baseUrl}/appointment/`, formData);
+      if(res.data.status == 400) {
+       toast(res.data.message)
+      }
+      else{
+        toast.success("Appointment Booked Successfully");
+        setFormData({
+          date: "",
+          time: "",
+          contact: "",
+          patientId: userInfo._id,
+          doctorId: "",
+          
+        })
+        setSelectedDoctor("");
+      }
 
     } catch (error) {
       console.error(error);
