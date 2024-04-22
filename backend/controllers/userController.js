@@ -91,6 +91,7 @@ const authUser = async (req, res) => {
       email: user.email,
       password: user.password,
       role: user.role,
+      image_url: user.image_url,
       token: generateToken(user._id),
     });
   } else {

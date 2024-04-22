@@ -48,7 +48,8 @@ const markNotificationAsRead = async (req, res) => {
 const markAllNotificationAsRead = async (req, res) => {
     const userId = req.params.userId;
     try {
-        const notifications = await Notification.updateMany({ user: userId }, { read: true });
+        await Notification.updateMany({ user: userId }, { read: true });
+        const notifications = await Notification.find({ user: userId }).sort({ createdAt: -1 });
         res.status(200).json(notifications);
     } catch (error) {
         console.error(error);

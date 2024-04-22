@@ -12,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import {toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 export function SignUp() {
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
@@ -23,7 +23,7 @@ export function SignUp() {
     if (UserInfo?.token) {
       navigate("/");
     }
-  },[navigate])
+  }, [navigate]);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -45,8 +45,8 @@ export function SignUp() {
 
   const handleSignUp = async (e, role) => {
     e.preventDefault();
-    let data = {...formData};
-    if(role === "doctor") {
+    let data = { ...formData };
+    if (role === "doctor") {
       data.role = "doctor";
     }
     try {
@@ -59,17 +59,21 @@ export function SignUp() {
       toast.error(error.response.data.message);
     }
   };
-  
+
   return (
     <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
       <div className="lg:flex justify-center flex-col items-center hidden">
         <div>
           <img
-            src="images/logo.png"
+            src={
+              localStorage.getItem("vite-ui-theme") == "dark"
+                ? "images/dark-logo.png"
+                : "images/logo.png"
+            }
             alt="Image"
             width="476"
             height="317"
-            className="object-cover dark:brightness-[0.2] dark:grayscale"
+            className="object-cover dark:grayscale dark:mix-blend-screen"
           />
         </div>
         <h1 className=" text-xl">Let&apos;s get Started</h1>
@@ -171,7 +175,10 @@ export function SignUp() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <form onSubmit={(e)=>handleSignUp(e,"doctor")} className="grid gap-4">
+                <form
+                  onSubmit={(e) => handleSignUp(e, "doctor")}
+                  className="grid gap-4"
+                >
                   <div className="grid grid-cols-2 gap-4">
                     <div className="grid gap-2">
                       <Label htmlFor="first-name">First name</Label>
@@ -252,9 +259,9 @@ export function SignUp() {
                   <Button type="submit" className="w-full">
                     Create an account
                   </Button>
-                  <Button variant="outline" className="w-full">
+                  {/* <Button variant="outline" className="w-full">
                     Sign up with Google
-                  </Button>
+                  </Button> */}
                 </form>
                 <div className="mt-4 text-center text-sm">
                   Already have an account?{" "}

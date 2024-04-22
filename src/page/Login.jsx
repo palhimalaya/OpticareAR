@@ -15,13 +15,12 @@ import { toast } from "react-toastify";
 export function Login() {
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
   const navigate = useNavigate();
-
   useEffect(() => {
     const UserInfo = JSON.parse(localStorage.getItem("userInfo"));
     if (UserInfo?.token) {
       navigate("/");
     }
-  },[navigate])
+  }, [navigate]);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -41,12 +40,14 @@ export function Login() {
     try {
       const response = await axios.post(`${baseUrl}/user/login`, formData);
       localStorage.setItem("userInfo", JSON.stringify(response.data));
-      console.log(response.data);
       toast.success("Login Successful");
       navigate("/");
     } catch (error) {
       console.error(error);
-      toast.error(error.response?.data.error || "Failed to Login! Please check credentials");
+      toast.error(
+        error.response?.data.error ||
+          "Failed to Login! Please check credentials"
+      );
     }
   };
   return (
@@ -54,11 +55,15 @@ export function Login() {
       <div className="lg:flex justify-center flex-col items-center hidden">
         <div>
           <img
-            src="images/logo.png"
+            src={
+              localStorage.getItem("vite-ui-theme") == "dark"
+                ? "images/dark-logo.png"
+                : "images/logo.png"
+            }
             alt="Image"
             width="476"
             height="317"
-            className="object-cover dark:brightness-[0.2] dark:grayscale"
+            className="object-cover dark:grayscale dark:mix-blend-screen"
           />
         </div>
         <h1 className=" text-xl">Let&apos;s get Started</h1>
@@ -94,12 +99,12 @@ export function Login() {
               <Button type="submit" className="w-full">
                 Sign in
               </Button>
-              <Button variant="outline" className="w-full">
+              {/* <Button variant="outline" className="w-full">
                 Sign up with Google
-              </Button>
+              </Button> */}
             </form>
             <div className="mt-4 text-center text-sm">
-              Already have an account?{" "}
+              Don&apos;t have an account?{" "}
               <Link to="/signup" className="underline">
                 Sign Up
               </Link>

@@ -1,17 +1,18 @@
 import { Button } from '@/components/ui/button';
-import { useEffect, useState } from 'react';
+import { NotificationContext } from '@/context/NotificationContext';
+import { useContext, useEffect, useState } from 'react';
 
 const NotificationPage = () => {
-  const [notifications, setNotifications] = useState([]);
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
   const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+  const {notifications, setNotifications} = useContext(NotificationContext)
 
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
         const response = await fetch(`${baseUrl}/notification/${userInfo._id}`);
         const data = await response.json();
-        setNotifications(data);
+        setNotifications(data || []);
       } catch (error) {
         console.error(error);
       }
@@ -21,9 +22,11 @@ const NotificationPage = () => {
 
   const handleMarkAllRead = async () => {
     try {
-      await fetch(`${baseUrl}/notification/${userInfo._id}`, {
+      const response = await fetch(`${baseUrl}/notification/${userInfo._id}`, {
         method: 'PUT',
       });
+      const data = await response.json();
+      setNotifications(data)
     } catch (error) {
       console.error(error);
   }

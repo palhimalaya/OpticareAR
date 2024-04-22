@@ -6,15 +6,16 @@ import {
   Card,
   CardDescription,
 } from "@/components/ui/card";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { UserContext } from "@/context/UserContext";
 
-const UserProfileSetting = () => {
+const UserProfileSetting = ({setOpen}) => {
   const [file, setFile] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
-  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const { userInfo, setUserInfo } = useContext(UserContext);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -43,6 +44,8 @@ const UserProfileSetting = () => {
         toast.success("Image uploaded successfully");
         const newUserInfo = { ...userInfo, image_url: res.data.image_url };
         localStorage.setItem("userInfo", JSON.stringify(newUserInfo));
+        setUserInfo(newUserInfo);
+        setOpen(false);
       })
       .catch((err) => {
         toast.error(err.response.data.message);
@@ -93,7 +96,7 @@ const UserProfileSetting = () => {
                 >
                   <div className="relative inline-block w-64">
                     <input
-                      accept=".png, .jpg, .gif"
+                      accept=".png, .jpg, .gif, .jpeg"
                       id="file"
                       type="file"
                       onChange={handleFileChange}

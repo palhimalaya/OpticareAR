@@ -34,14 +34,15 @@ import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "@/components/ui/
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom"
 import { ModeToggle } from "@/components/mode-toogle"
 import Cart from "@/components/Cart"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import NotificationModal from "@/components/NotificationModal"
 import { Badge } from "@/components/ui/badge"
+import { NotificationContext } from "@/context/NotificationContext"
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const [userData, setUserData] = useState({});
-  const [notifications, setNotifications] = useState([]);
+  const {notifications, setNotifications} = useContext(NotificationContext)
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 
   useEffect(() => {
@@ -53,14 +54,14 @@ export default function Dashboard() {
       try {
         const response = await fetch(`${baseUrl}/notification/${UserInfo._id}`);
         const data = await response.json();
-        setNotifications(data.filter((notification) => !notification.read));
+        setNotifications(data || []);
       } catch (error) {
         console.error(error);
       }
     };
     fetchNotifications();
     setUserData(UserInfo);
-  },[navigate])
+  },[navigate, setNotifications])
   const location = useLocation();
   const handleLogout= ()=>{
     localStorage.removeItem("userInfo");
@@ -89,7 +90,7 @@ export default function Dashboard() {
                       }</Badge>
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <NotificationModal notifications={notifications}/>
+                    <NotificationModal notifications={notifications.filter((notification) => !notification.read)}/>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
               </NavigationMenuList>

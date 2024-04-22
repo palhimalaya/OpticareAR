@@ -7,27 +7,29 @@ import {
 
 import UserProfileSetting from "./UserProfileSetting"
 import { Button } from "./ui/button"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import axios from "axios"
+import { UserContext } from "@/context/UserContext"
 
 
 
 export default function UserProfile() {
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
   const [appointments, setAppointments] = useState([]);
-  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const { userInfo, setUserInfo } = useContext(UserContext);
+  const [open, setOpen] = useState(false);
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
         const response = await axios.get(`${baseUrl}/appointment/${userInfo._id}`);
         setAppointments(response.data.data || []);
-        console.log(response.data.data);
       } catch (error) {
         console.error(error);
       }
     };
+    setUserInfo(JSON.parse(localStorage.getItem("userInfo")))
     fetchAppointments();
-  }, [baseUrl])
+  }, [baseUrl, setUserInfo])
   return (
     <main className="bg-[#0000] min-h-screen p-4 lg:p-10">
       <div className="">
@@ -38,7 +40,7 @@ export default function UserProfile() {
                 <img
                   alt="Profile"
                   height="400"
-                  src= {userInfo.image_url || "https://source.unsplash.com/400x400/?portrait"}
+                  src= {userInfo.image_url || ""}
                   style={{
                     aspectRatio: "400/400",
                     objectFit: "cover",
@@ -66,12 +68,12 @@ export default function UserProfile() {
                 </div>
               </div>
               <div className="mt-4 lg:mt-0 lg:ml-auto">
-                <Dialog>
+                <Dialog open={open} onOpenChange={setOpen}>
                   <DialogTrigger asChild>
                     <Button variant="outline">Edit Profile</Button>
                   </DialogTrigger>
                   <DialogContent>
-                    <UserProfileSetting/>
+                    <UserProfileSetting setOpen={setOpen}/>
                   </DialogContent>
                 </Dialog>
               </div>
