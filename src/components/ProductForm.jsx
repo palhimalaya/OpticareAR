@@ -10,7 +10,7 @@ import { Textarea } from "./ui/textarea"
 import { getProduct } from "@/lib/product"
 import { ProductContext } from "@/context/ProductContext"
 
-const ProductForm = ({ setOpen, id }) => {
+const ProductForm = ({ setOpen, getProducts, id }) => {
   const navigate = useNavigate();
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
   const { products, setProducts } = useContext(ProductContext);
@@ -21,6 +21,7 @@ const ProductForm = ({ setOpen, id }) => {
     description: "",
     price: "",
     image: "",
+    sku: "",
     stock: "",
   })
 
@@ -47,11 +48,13 @@ const ProductForm = ({ setOpen, id }) => {
       if(id){
         await axios.put(`${baseUrl}/products/${id}`, product);
         toast.success("Product updated successfully");
+        getProducts()
         setOpen(false)
         navigate("/addProducts");
       }else{
         await axios.post(`${baseUrl}/products`, product);
         toast.success("Product created successfully");
+        getProducts()
         setOpen(false)
         navigate("/addProducts");
       }
@@ -91,6 +94,17 @@ const ProductForm = ({ setOpen, id }) => {
                 onChange={handleChange}
                 value={product.brand}
                 placeholder="Ray Ban"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="lastName">SKU</Label>
+              <Input
+                id="sku"
+                type="text"
+                name= "sku"
+                onChange={handleChange}
+                value={product.sku}
+                placeholder="rayban_predator_noir_vert_classique"
               />
             </div>
             <div className="grid gap-2">

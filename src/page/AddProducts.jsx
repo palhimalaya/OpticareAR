@@ -30,31 +30,42 @@ import { ProductContext } from "@/context/ProductContext";
 const AddProducts = () => {
   const navigate = useNavigate();
   const { products, setProducts } = useContext(ProductContext);
+  const [product, setProduct] = useState({
+    name: "",
+    brand: "",
+    description: "",
+    price: "",
+    image: "",
+    sku: "",
+    stock: "",
+  })
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
   const [open, setOpen] = useState(false);
   const [openAddProduct, setOpenProduct] = useState(false);
+
+  const getProducts = async() => {
+    try {
+      const response = await axios.get(`${baseUrl}/products`);
+      setProducts(response.data);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to fetch products");
+    }
+  }
     
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     if(userInfo?.role !== "admin"){
       navigate('/')
     }
-    const getProducts = async() => {
-      try {
-        const response = await axios.get(`${baseUrl}/products`);
-        setProducts(response.data);
-      } catch (error) {
-        console.error(error);
-        toast.error("Failed to fetch products");
-      }
-    }
     getProducts();
-  }, [baseUrl, navigate, setProducts, products]);
+  }, [baseUrl, navigate, setProducts]);
 
   const handleDelete = async(id)=>{
     try {
       await axios.delete(`${baseUrl}/products/${id}`);
       toast.success("Product deleted successfully");
+      getProducts()
       setOpen(false)
       navigate("/addProducts");
     } catch (error) {
@@ -72,7 +83,7 @@ const AddProducts = () => {
               <Button variant="outline">Add Product</Button>
             </DialogTrigger>
             <DialogContent>
-              <ProductForm open={openAddProduct} setOpen={setOpenProduct}/>
+              <ProductForm setOpen={setOpenProduct} getProducts= {getProducts}  />
             </DialogContent>
           </Dialog>
         </div>
@@ -124,7 +135,7 @@ const AddProducts = () => {
                         </Button>
                       </DialogTrigger>
                       <DialogContent>
-                        <ProductForm setOpen={setOpen} id={product._id} />
+                        <ProductForm setOpen={setOpen} getProducts= {getProducts} id={product._id} />
                       </DialogContent>
                     </Dialog>
                     <AlertDialog>

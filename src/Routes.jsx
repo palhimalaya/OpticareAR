@@ -92,8 +92,9 @@ export const router = createBrowserRouter([
         path: "doctor-reviews/:doctorId",
         element: <PerDoctorReviews/>
       },
+  
       {
-        path: "try-it-on",
+        path: "try-it-on/:sku",
         element: <AppCanvas/>,
       }
     ]

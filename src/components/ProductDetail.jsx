@@ -1,6 +1,6 @@
 import { ProductsData } from '@/data/ProductsData';
 import { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import {
   Sheet,
   SheetContent,
@@ -105,7 +105,7 @@ const ProductDetail = () => {
                 ${data.price}
               </span>
               <div className='flex ml-auto'>
-              <Link to={'/try-it-on'} className="flex text-white mr-1 bg-gray-500 border-0 py-2 px-6 focus:outline-none hover:bg-gray-600 rounded">
+              <Link to={`/try-it-on/${data.sku}`} className="flex text-white mr-1 bg-gray-500 border-0 py-2 px-6 focus:outline-none hover:bg-gray-600 rounded">
                 &apos;Try It On&apos;
               </Link>
               <Sheet>

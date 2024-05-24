@@ -9,7 +9,7 @@ import { UserProvider } from "./context/UserContext.jsx";
 import { NotificationProvider } from "./context/NotificationContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <UserProvider>
         <NotificationProvider>
@@ -21,5 +21,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         </NotificationProvider>
       </UserProvider>
     </ThemeProvider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );

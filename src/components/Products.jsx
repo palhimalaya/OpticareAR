@@ -70,6 +70,7 @@ const Products = () => {
                 imageSrc={product.image}
                 title={product.name}
                 price={product.price}
+                sku={product.sku}
               />
             ))}
           </div>
@@ -79,7 +80,7 @@ const Products = () => {
   );
 };
 
-const ProductCard = ({ id, imageSrc, title, price }) => {
+const ProductCard = ({ id, imageSrc, title, price, sku}) => {
   return (
     <Card className="p-4 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 mb-4 transition-transform duration-500 ease-in-out transform hover:scale-105 hover:z-50 shadow-lg">
       <Link to={`/product/${id}`}>
@@ -106,7 +107,7 @@ const ProductCard = ({ id, imageSrc, title, price }) => {
       </Link>
 
       <div className="flex gap-1">
-        <Link to={'/try-it-on'} className="text-white text-sm bg-gray-500 border-0 focus:outline-none hover:bg-gray-600 rounded p-1">
+        <Link to={`/try-it-on/${sku}`} className="text-white text-sm bg-gray-500 border-0 focus:outline-none hover:bg-gray-600 rounded p-1">
           &apos;Try It On&apos;
         </Link>
       </div>
