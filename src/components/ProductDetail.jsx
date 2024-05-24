@@ -105,9 +105,9 @@ const ProductDetail = () => {
                 ${data.price}
               </span>
               <div className='flex ml-auto'>
-              <button className="flex text-white mr-1 bg-gray-500 border-0 py-2 px-6 focus:outline-none hover:bg-gray-600 rounded">
+              <Link to={'/try-it-on'} className="flex text-white mr-1 bg-gray-500 border-0 py-2 px-6 focus:outline-none hover:bg-gray-600 rounded">
                 &apos;Try It On&apos;
-              </button>
+              </Link>
               <Sheet>
                 <SheetTrigger onClick={()=>addToCart(data)} className="py-2 text-white bg-indigo-500 border-0 px-1 focus:outline-none hover:bg-indigo-600 rounded ml-auto">Add To Cart</SheetTrigger>
                 <SheetContent>

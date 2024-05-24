@@ -106,9 +106,9 @@ const ProductCard = ({ id, imageSrc, title, price }) => {
       </Link>
 
       <div className="flex gap-1">
-        <button className="text-white text-sm bg-gray-500 border-0 focus:outline-none hover:bg-gray-600 rounded p-1">
+        <Link to={'/try-it-on'} className="text-white text-sm bg-gray-500 border-0 focus:outline-none hover:bg-gray-600 rounded p-1">
           &apos;Try It On&apos;
-        </button>
+        </Link>
       </div>
     </Card>
   );

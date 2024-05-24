@@ -18,6 +18,7 @@ import Checkout from "./page/Checkout";
 import NotificationPage from "./page/NotificationPage";
 import DoctorReview from "./page/DoctorReview";
 import PerDoctorReviews from "./components/PerDoctorReviews";
+import AppCanvas from "./page/AppCanvas";
 
 export const router = createBrowserRouter([
   {
@@ -90,6 +91,10 @@ export const router = createBrowserRouter([
       {
         path: "doctor-reviews/:doctorId",
         element: <PerDoctorReviews/>
+      },
+      {
+        path: "try-it-on",
+        element: <AppCanvas/>,
       }
     ]
   },
