@@ -19,6 +19,8 @@ import NotificationPage from "./page/NotificationPage";
 import DoctorReview from "./page/DoctorReview";
 import PerDoctorReviews from "./components/PerDoctorReviews";
 import AppCanvas from "./page/AppCanvas";
+import OrderSuccess from "./page/OrderSuccess";
+import Orders from "./page/Orders";
 
 export const router = createBrowserRouter([
   {
@@ -79,6 +81,14 @@ export const router = createBrowserRouter([
       {
         path: "checkout",
         element: <Checkout/>
+      },
+      {
+        path: 'ordersuccess',
+        element: <OrderSuccess/>
+      },
+      {
+        path: 'orders',
+        element: <Orders/>
       },
       {
         path: "notifications",

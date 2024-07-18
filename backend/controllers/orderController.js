@@ -1,48 +1,36 @@
 
-const Order = require("../models/orderModel");
-const { khaltiPayment } = require("../config/payment");
+const Cart = require("../models/cart");
+const Order = require("../models/order");
 
-// Create order
 const createOrder = async (req, res) => {
-    let body = { ...req.body }; 
-    try {
-        const products = req.body.products; 
-        const order = await new Order({ ...body }).save(); 
-    
-        if (body.paymentType === "Khalti") {
-          const requestPayload = {
-            return_url: `http://localhost:8000/api/khalti/callback`,
-            website_url: `http://localhost:8000`,
-            amount: req.body.totalPrice * 100,
-            purchase_order_id: order._id,
-            purchase_order_name: "Order " + order.user,
-          };
-    
-          const khalti = await khaltiPayment(requestPayload); 
-          res.status(200).send({
-            data: khalti,
-            order_id: order._id,
-            type: "khalti",
-            message: "Redirecting to khalti.",
-          });
-        } else {
-          res.status(200).send({
-            data: order,
-            type: "cash",
-            message: "Order placed successfully.",
-          });
-        }
-      } catch (error) {
-        console.log(error);
-        res.status(500).send({ message: "Internal server error." });
-      }
+  try {
+    const { userId, items, paymentMethod, totalPrice, shippingAddress } = req.body;
+    if (!req.body.items.every(item => item.product)) {
+      return res.status(400).send({ message: "Each item must include a productId." });
+    }
+    const newOrder = new Order({
+      userId,
+      items,
+      paymentMethod,
+      totalPrice,
+      shippingAddress
+    });
+
+    const savedOrder = await newOrder.save();
+    //remove items from cart
+    await Cart.findOneAndDelete({ userId });
+    res.status(200).json(savedOrder);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Failed to create order' });
+  }
 };
 
-// Get all orders
+// Get orders
 const getOrders = async (req, res) => {
     const id = req.params.id;
     try {
-        const orders = await Order.find({ userId: id });
+        const orders = await Order.find({ userId: id }).populate('items.product');
         res.status(200).send(orders);
     } catch (error) {
         console.log(error);
@@ -50,8 +38,51 @@ const getOrders = async (req, res) => {
     }
 };
 
+const updateOrder = async (req, res) => {
+    const id = req.params.id;
+    const status = req.body.status;
+    try {
+        const order = await Order.findById(id);
+        if (!order) {
+            return res.status(404).send({ message: "Order not found." });
+        }
+        order.status = status;
+        await order.save();
+        return res.status(200).send({message: 'Order updated successfully'})
+    } catch (error) {
+        return res.status(500).json({ message: 'Failed to update order' });
+    }
+}
+
+// get all orders
+const getAllOrders = async (req, res) => {
+    try {
+        const orders = await Order.find().populate('items.product');
+        res.status(200).send(orders);
+    } catch (error) {
+        res.status(500).send({ message: "Internal server error." });
+        }
+}
+
+const deleteOrder = async (req, res)=>{
+    const id = req.params.id;
+    try {
+        const order = await Order.findById(id);
+        if (!order) {
+            return res.status(404).send({ message: "Order not found." });
+        }
+        await Order.findOneAndDelete(id);
+        return res.status(200).send({message: 'Order deleted successfully'})
+    } catch (error) {
+        return res.status(500).json({ message: 'Failed to delete order' });
+    }
+}
+
 
 module.exports = {
     createOrder,
-    getOrders
+    getOrders,
+    updateOrder,
+    getAllOrders,
+    deleteOrder
 };

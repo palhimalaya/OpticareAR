@@ -5,11 +5,7 @@ const get_cart_items = async (req, res) => {
     const userId = req.params.userId;
     try {
         let cart = await Cart.findOne({ userId }).populate('items.product');
-        if (cart && cart.items.length > 0) {
-            res.send(cart);
-        } else {
-            res.send({ message: "No items in the cart" });
-        }
+        res.send(cart)
     } catch (err) {
         console.log(err);
         res.status(500).send("Something went wrong");

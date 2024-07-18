@@ -147,6 +147,13 @@ export default function Dashboard() {
                 Doctor reviews
               </Link>
               <Link
+                to="/orders"
+                className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary ${location.pathname === `/orders` ? "bg-muted" : 'text-muted-foreground'}`}
+              >
+                <Star className="h-4 w-4" />
+                Orders
+              </Link>
+              <Link
                 to="/contact"
                 className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary ${location.pathname === `/contact` ? "bg-muted" : 'text-muted-foreground'}`}
               >
@@ -223,6 +230,21 @@ export default function Dashboard() {
                   Appointments
                   </Link>
                 }
+                <Link
+                    to="/doctor-reviews"
+                    className={`mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 hover:text-foreground ${location.pathname === `/doctor-reviews` ? "bg-muted" : 'text-muted-foreground'}`}
+                    >
+                    <CalendarRange className="h-5 w-5" />
+                    Doctor reviews
+                  </Link>
+
+                  <Link
+                    to="/orders"
+                    className={`mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 hover:text-foreground ${location.pathname === `/orders` ? "bg-muted" : 'text-muted-foreground'}`}
+                    >
+                    <CalendarRange className="h-5 w-5" />
+                  Orders
+                  </Link>
                 <Link
                   to="/contact"
                   className={`mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 hover:text-foreground ${location.pathname === `/contact` ? "bg-muted" : 'text-muted-foreground'}`}
